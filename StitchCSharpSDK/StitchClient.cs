@@ -157,14 +157,14 @@ namespace Stitch
                     json.ToBsonDocument().ToDictionary()))
             );
         }
-        #endregion
-        #region Pipelines
+		#endregion
 
-        /// Executes a pipeline with the current app
-        /// @param pipeline The pipeline to execute.
-        /// return A task containing the result of the pipeline that can be resolved on completion
-        /// of the execution
-        public async Task<StitchResult<List<BsonValue>>> ExecutePipeline(
+		#region Pipelines
+		/// <summary>Executes a pipeline with the current app</summary>
+		/// <param name="pipeline">The pipeline to execute.</param>
+		/// <returns>A task containing the result of the pipeline that can be
+		/// resolved on completion of the execution. </returns>
+		public async Task<StitchResult<List<BsonDocument>>> ExecutePipeline(
             params PipelineStage[] pipeline)
         {
             if (!IsAuthenticated())
@@ -172,7 +172,7 @@ namespace Stitch
                 throw new Exception("Must first authenticate");
             }
 
-            var stitchResult = new StitchResult<List<BsonValue>>();
+            var stitchResult = new StitchResult<List<BsonDocument>>();
             string pipeStr;
             try
             {
@@ -190,8 +190,10 @@ namespace Stitch
                 pipeStr,
                 rawUnmarshaller: (string res) =>
                 {
-                Console.WriteLine(res);
-                    return BsonDocument.Parse(res)["result"].AsBsonArray.ToList();
+                    return BsonDocument.Parse(res)["result"]
+                                       .AsBsonArray
+                                       .ToList()
+                                       .ConvertAll(obj => obj.AsBsonDocument);
                 }
             );
         }
@@ -307,7 +309,7 @@ namespace Stitch
 
                 if (rawUnmarshaller != null)
                 {
-                    stitchResult.Result = rawUnmarshaller(content);
+                    stitchResult.Value = rawUnmarshaller(content);
                 }
                 else
                 {
@@ -320,7 +322,7 @@ namespace Stitch
                     }
                     else
                     {
-                        stitchResult.Result = unmarshaller(json);
+                        stitchResult.Value = unmarshaller(json);
                     }
                 }
             }

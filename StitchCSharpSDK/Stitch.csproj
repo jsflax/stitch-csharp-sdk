@@ -17,5 +17,7 @@
     <Folder Include="Auth\Providers\EmailPassword\" />
     <Folder Include="Auth\Providers\Facebook\" />
     <Folder Include="Auth\Providers\Google\" />
+    <Folder Include="Services\" />
+    <Folder Include="Services\MongoDB\" />
   </ItemGroup>
 </Project>
