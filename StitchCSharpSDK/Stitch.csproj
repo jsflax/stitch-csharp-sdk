@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MongoDB.Bson" Version="2.4.4" />
+    <PackageReference Include="NUnit" Version="3.7.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Auth\" />
+    <Folder Include="Auth\Providers\" />
+    <Folder Include="Auth\Providers\Anonymous\" />
+    <Folder Include="Auth\Providers\EmailPassword\" />
+    <Folder Include="Auth\Providers\Facebook\" />
+    <Folder Include="Auth\Providers\Google\" />
+  </ItemGroup>
+</Project>
