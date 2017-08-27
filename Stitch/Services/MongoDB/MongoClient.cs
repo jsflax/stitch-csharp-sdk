@@ -11,7 +11,7 @@ namespace Stitch.Services.MongoDB
     /// </summary>
     public class MongoClient
     {
-        private readonly StitchClient _stitchClient;
+        private readonly StitchClientBase _stitchClient;
         private readonly string _service;
 
         /// <summary>
@@ -20,7 +20,7 @@ namespace Stitch.Services.MongoDB
         /// </summary>
         /// <param name="stitchClient">The client to execute with.</param>
         /// <param name="service">The name of the MongoDB service.</param>
-        public MongoClient(StitchClient stitchClient, string service)
+        public MongoClient(StitchClientBase stitchClient, string service)
         {
             this._stitchClient = stitchClient;
             this._service = service;
@@ -97,7 +97,7 @@ namespace Stitch.Services.MongoDB
                 bool? count = null
             )
             {
-                var args = new Dictionary<string, object>
+                var args = new BsonDocument
                 {
                     { Parameters.DATABASE, _database._dbName },
                     { Parameters.COLLECTION, _collName },
@@ -141,7 +141,7 @@ namespace Stitch.Services.MongoDB
                 bool multi
             )
             {
-                var args = new Dictionary<string, object>
+                var args = new BsonDocument
                 {
                     { Parameters.DATABASE, _database._dbName },
                     { Parameters.COLLECTION, _collName },
@@ -167,12 +167,12 @@ namespace Stitch.Services.MongoDB
                 params BsonDocument[] documents
             )
             {
-                var literalArgs = new Dictionary<string, object>
+                var literalArgs = new BsonDocument
                 {
-                    { PipelineStage.LiteralStage.PARAMETER_ITEMS, documents }
+                    { PipelineStage.LiteralStage.ParameterItems, new BsonArray(documents) }
                 };
 
-                var insertArgs = new Dictionary<string, object>
+                var insertArgs = new BsonDocument
                 {
                     { Parameters.DATABASE, _database._dbName },
                     { Parameters.COLLECTION, _collName }
@@ -180,7 +180,7 @@ namespace Stitch.Services.MongoDB
 
                 var pipelineStages = new List<PipelineStage>
                 {
-                    new PipelineStage(PipelineStage.LiteralStage.NAME,
+                    new PipelineStage(PipelineStage.LiteralStage.Name,
                                       args: literalArgs),
                     new PipelineStage(Stages.INSERT,
                                       _database._client._service,
@@ -200,7 +200,7 @@ namespace Stitch.Services.MongoDB
             public PipelineStage MakeDeleteStage(BsonDocument query,
                                                  bool singleDoc)
             {
-                var args = new Dictionary<string, object>
+                var args = new BsonDocument
                 {
                     { Parameters.DATABASE, _database._dbName },
                     { Parameters.COLLECTION, _collName },

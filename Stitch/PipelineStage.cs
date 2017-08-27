@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using Newtonsoft.Json;
 
 namespace Stitch
@@ -7,9 +9,11 @@ namespace Stitch
     // an action, service, and its arguments.
     public struct PipelineStage
     {
-        // The action that represents this stage.
+        /// The action that represents this stage.
         [JsonProperty(PropertyName = "action", 
                       NullValueHandling = NullValueHandling.Ignore)]
+        [BsonElement("action")]
+        [BsonIgnoreIfNull]
         private readonly string _action;
 
         /**
@@ -18,21 +22,27 @@ namespace Stitch
          */
         [JsonProperty(PropertyName = "service",
                       NullValueHandling = NullValueHandling.Ignore)]
-        private readonly string _service;
+		[BsonElement("service")]
+        [BsonIgnoreIfNull]
+		private readonly string _service;
 
         /**
 		 * The arguments to invoke the action with.
 		 */
         [JsonProperty(PropertyName = "args",
                       NullValueHandling = NullValueHandling.Ignore)]
-        private readonly Dictionary<string, object> _args;
+		[BsonElement("args")]
+        [BsonIgnoreIfNull]
+		private readonly BsonDocument _args;
 
         /**
 		 * The expression to evaluate for use within the arguments via expansion.
 		 */
         [JsonProperty(PropertyName = "let",
                       NullValueHandling = NullValueHandling.Ignore)]
-        private readonly object _let;
+		[BsonElement("let")]
+        [BsonIgnoreIfNull]
+		private readonly object _let;
 
         /**
          * Constructs a completely specified pipeline stage
@@ -45,20 +55,19 @@ namespace Stitch
          */
         public PipelineStage(string action,
                              string service = null,
-                             Dictionary<string, object> args = null,
+                             BsonDocument args = null,
                              object let = null)
         {
-            _action = action;
-            _service = service;
-            _args = args;
-            _let = let;
+            this._action = action;
+            this._service = service;
+            this._args = args;
+            this._let = let;
         }
 
         public static class LiteralStage
         {
-            public const string NAME = "literal";
-            public const string PARAMETER_ITEMS = "items";
+            public const string Name = "literal";
+            public const string ParameterItems = "items";
         }
     }
-
 }
