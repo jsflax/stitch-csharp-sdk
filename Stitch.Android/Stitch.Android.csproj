@@ -53,8 +53,8 @@
     <AndroidResource Include="Resources\values\Strings.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\StitchCSharpSDK\Stitch.csproj">
-      <Project>{9FFB6BAA-569F-4716-9D47-CF04DAC09AE7}</Project>
+    <ProjectReference Include="..\Stitch\Stitch.csproj">
+      <Project>{71E9FE79-7AC7-415B-BCA5-E031B9741F69}</Project>
       <Name>Stitch</Name>
     </ProjectReference>
   </ItemGroup>
